@@ -1,4 +1,8 @@
-export type Msg = { role: "user" | "assistant"; content: string };
+export type MsgContent =
+  | string
+  | Array<{ type: "text"; text: string } | { type: "image_url"; image_url: { url: string } }>;
+
+export type Msg = { role: "user" | "assistant"; content: MsgContent };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
