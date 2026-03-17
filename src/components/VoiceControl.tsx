@@ -23,15 +23,22 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
       alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
       return;
     }
+
+    // Stop any ongoing speech so the mic can hear the user
+    synthRef.current.cancel();
+    onSpeakingChange?.(false);
+
     const recognition = new SpeechRecognitionAPI();
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
     recognition.lang = "en-US";
 
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
+      const last = event.results.length - 1;
+      const transcript = event.results[last][0].transcript;
       onTranscript(transcript);
       setIsListening(false);
+      recognition.stop();
     };
 
     recognition.onerror = () => setIsListening(false);
@@ -40,7 +47,7 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [onTranscript]);
+  }, [onTranscript, onSpeakingChange]);
 
   const stopListening = useCallback(() => {
     recognitionRef.current?.stop();
