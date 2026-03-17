@@ -119,7 +119,7 @@ const Index = () => {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <header className="flex items-center justify-between py-4 px-6 border-b border-border bg-card/80 backdrop-blur-sm">
+      <header className="flex items-center justify-between py-4 px-6 border-b border-border bg-card/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <ChronosAvatar isThinking={isLoading} isSpeaking={isSpeaking} size={36} />
           <h1 className="text-xl font-display font-bold text-foreground tracking-tight">

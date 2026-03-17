@@ -19,10 +19,10 @@ const ChatMessage = ({ role, content, imageUrl, isStreaming = false, isSpeaking 
       {!isUser && <ChronosAvatar isThinking={isStreaming} isSpeaking={isSpeaking} />}
 
       <div
-        className={`max-w-[80%] px-5 py-3.5 rounded-bubble shadow-soft ${
+        className={`max-w-[80%] px-5 py-3.5 rounded-bubble ${
           isUser
-            ? "bg-chronos-bubble-user text-primary-foreground"
-            : "bg-card text-card-foreground"
+            ? "bg-primary/90 text-primary-foreground shadow-[0_0_20px_hsl(195_100%_50%/0.15)]"
+            : "bg-card text-card-foreground border border-border shadow-soft"
         }`}
       >
         {imageUrl && (

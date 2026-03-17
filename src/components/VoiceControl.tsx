@@ -23,15 +23,22 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
       alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
       return;
     }
+
+    // Stop any ongoing speech so the mic can hear the user
+    synthRef.current.cancel();
+    onSpeakingChange?.(false);
+
     const recognition = new SpeechRecognitionAPI();
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
     recognition.lang = "en-US";
 
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
+      const last = event.results.length - 1;
+      const transcript = event.results[last][0].transcript;
       onTranscript(transcript);
       setIsListening(false);
+      recognition.stop();
     };
 
     recognition.onerror = () => setIsListening(false);
@@ -40,7 +47,7 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [onTranscript]);
+  }, [onTranscript, onSpeakingChange]);
 
   const stopListening = useCallback(() => {
     recognitionRef.current?.stop();
@@ -77,8 +84,8 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
         disabled={disabled}
         className={`w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-40 ${
           isListening
-            ? "bg-destructive text-destructive-foreground animate-pulse"
-            : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            ? "bg-destructive text-destructive-foreground animate-pulse shadow-[0_0_16px_hsl(0_72%_55%/0.4)]"
+            : "bg-primary/15 text-primary hover:bg-primary/25 border border-primary/30"
         }`}
         title={isListening ? "Stop listening" : "Speak to Chronos"}
       >
@@ -91,8 +98,8 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
         }}
         className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
           isMuted
-            ? "bg-muted text-muted-foreground"
-            : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            ? "bg-muted text-muted-foreground border border-border"
+            : "bg-primary/15 text-primary hover:bg-primary/25 border border-primary/30"
         }`}
         title={isMuted ? "Unmute Chronos" : "Mute Chronos"}
       >
