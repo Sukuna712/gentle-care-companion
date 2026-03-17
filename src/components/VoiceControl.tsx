@@ -84,8 +84,8 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
         disabled={disabled}
         className={`w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-40 ${
           isListening
-            ? "bg-destructive text-destructive-foreground animate-pulse"
-            : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            ? "bg-destructive text-destructive-foreground animate-pulse shadow-[0_0_16px_hsl(0_72%_55%/0.4)]"
+            : "bg-primary/15 text-primary hover:bg-primary/25 border border-primary/30"
         }`}
         title={isListening ? "Stop listening" : "Speak to Chronos"}
       >
