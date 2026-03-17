@@ -98,8 +98,8 @@ const VoiceControl = ({ onTranscript, textToSpeak, disabled, onSpeakingChange }:
         }}
         className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
           isMuted
-            ? "bg-muted text-muted-foreground"
-            : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            ? "bg-muted text-muted-foreground border border-border"
+            : "bg-primary/15 text-primary hover:bg-primary/25 border border-primary/30"
         }`}
         title={isMuted ? "Unmute Chronos" : "Mute Chronos"}
       >

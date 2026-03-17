@@ -75,7 +75,8 @@ export default {
       },
       boxShadow: {
         chronos: "var(--chronos-shadow)",
-        soft: "0 4px 24px -4px hsl(217 91% 60% / 0.08)",
+        soft: "0 4px 24px -4px hsl(195 100% 50% / 0.1)",
+        glow: "0 0 30px hsl(195 100% 50% / 0.2)",
       },
       keyframes: {
         "accordion-down": {
