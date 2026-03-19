@@ -24,7 +24,11 @@ const Index = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auth redirect disabled for now
+  useEffect(() => {
+    if (!authLoading && !session) {
+      navigate("/auth");
+    }
+  }, [authLoading, session, navigate]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
