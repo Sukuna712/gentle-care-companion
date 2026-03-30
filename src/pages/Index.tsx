@@ -25,9 +25,10 @@ const Index = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!authLoading && !session) {
-      navigate("/auth");
-    }
+    // Auth gate disabled for now
+    // if (!authLoading && !session) {
+    //   navigate("/auth");
+    // }
   }, [authLoading, session, navigate]);
 
   useEffect(() => {
