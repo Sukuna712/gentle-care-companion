@@ -9,7 +9,11 @@ import HistoryPanel from "@/components/HistoryPanel";
 import { useAuth } from "@/hooks/useAuth";
 import { saveConversation } from "@/lib/historyStorage";
 import { toast } from "sonner";
-import { LogOut, MessageCircle, Clock } from "lucide-react";
+import { LogOut, MessageCircle, Clock, Heart, Camera, AlertTriangle, Stethoscope } from "lucide-react";
+import FirstAidCards from "@/components/FirstAidCards";
+import InjuryTimeline from "@/components/InjuryTimeline";
+import SymptomChecker from "@/components/SymptomChecker";
+import EmergencySOS from "@/components/EmergencySOS";
 
 interface DisplayMsg {
   role: "user" | "assistant";
@@ -24,7 +28,7 @@ const Index = () => {
   const [streamMessages, setStreamMessages] = useState<Msg[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [activeTab, setActiveTab] = useState<"chat" | "history">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "history" | "firstaid" | "timeline" | "symptoms" | "sos">("chat");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -156,31 +160,7 @@ const Index = () => {
           </h1>
         </div>
 
-        {/* Tab switcher */}
-        <div className="flex items-center bg-secondary/50 rounded-full p-1 gap-0.5">
-          <button
-            onClick={() => setActiveTab("chat")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-body transition-all ${
-              activeTab === "chat"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <MessageCircle size={14} />
-            Chat
-          </button>
-          <button
-            onClick={() => setActiveTab("history")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-body transition-all ${
-              activeTab === "history"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Clock size={14} />
-            History
-          </button>
-        </div>
+        <span className="text-xs text-muted-foreground font-body hidden sm:inline">Healthcare Companion</span>
 
         <button
           onClick={signOut}
