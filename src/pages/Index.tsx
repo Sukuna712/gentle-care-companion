@@ -5,9 +5,11 @@ import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 import Disclaimer from "@/components/Disclaimer";
 import ChronosAvatar from "@/components/ChronosAvatar";
+import HistoryPanel from "@/components/HistoryPanel";
 import { useAuth } from "@/hooks/useAuth";
+import { saveConversation } from "@/lib/historyStorage";
 import { toast } from "sonner";
-import { LogOut } from "lucide-react";
+import { LogOut, MessageCircle, Clock } from "lucide-react";
 
 interface DisplayMsg {
   role: "user" | "assistant";
@@ -22,18 +24,40 @@ const Index = () => {
   const [streamMessages, setStreamMessages] = useState<Msg[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [activeTab, setActiveTab] = useState<"chat" | "history">("chat");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Auth gate disabled for now
-    // if (!authLoading && !session) {
-    //   navigate("/auth");
-    // }
   }, [authLoading, session, navigate]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
+
+  // Auto-save conversation when it has content and user switches to history
+  useEffect(() => {
+    if (activeTab === "history" && messages.length >= 2) {
+      saveConversation(messages);
+    }
+  }, [activeTab]);
+
+  const startNewChat = () => {
+    if (messages.length >= 2) {
+      saveConversation(messages);
+    }
+    setMessages([]);
+    setStreamMessages([]);
+    setActiveTab("chat");
+  };
+
+  const restoreConversation = (msgs: DisplayMsg[]) => {
+    setMessages(msgs);
+    setStreamMessages(
+      msgs.map((m) => ({ role: m.role, content: m.content }) as Msg)
+    );
+    setActiveTab("chat");
+  };
 
   const sendText = async (input: string) => {
     const userDisplay: DisplayMsg = { role: "user", content: input };
@@ -131,6 +155,33 @@ const Index = () => {
             Chronos
           </h1>
         </div>
+
+        {/* Tab switcher */}
+        <div className="flex items-center bg-secondary/50 rounded-full p-1 gap-0.5">
+          <button
+            onClick={() => setActiveTab("chat")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-body transition-all ${
+              activeTab === "chat"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <MessageCircle size={14} />
+            Chat
+          </button>
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-body transition-all ${
+              activeTab === "history"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Clock size={14} />
+            History
+          </button>
+        </div>
+
         <button
           onClick={signOut}
           className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors font-body"
@@ -141,58 +192,76 @@ const Index = () => {
         </button>
       </header>
 
-      {/* Chat area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
-          <Disclaimer />
+      {/* Content area */}
+      {activeTab === "chat" ? (
+        <>
+          <div ref={scrollRef} className="flex-1 overflow-y-auto">
+            <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
+              <Disclaimer />
 
-          {messages.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-16 gap-4">
-              <ChronosAvatar isThinking={false} size={80} />
-              <p className="text-muted-foreground text-center text-sm font-body max-w-sm">
-                Hello. I am Chronos, your personal healthcare companion. Tap the microphone to speak, or use the camera to scan an injury.
-              </p>
-            </div>
-          )}
-
-          {messages.map((msg, i) => (
-            <ChatMessage
-              key={i}
-              role={msg.role}
-              content={msg.content}
-              imageUrl={msg.imageUrl}
-              isStreaming={isLoading && i === messages.length - 1 && msg.role === "assistant"}
-              isSpeaking={isSpeaking && i === messages.length - 1 && msg.role === "assistant"}
-            />
-          ))}
-
-          {isLoading && messages[messages.length - 1]?.role === "user" && (
-            <div className="flex gap-3 items-center animate-fade-slide-up">
-              <ChronosAvatar isThinking size={40} />
-              <div className="bg-card rounded-bubble px-5 py-3.5 shadow-soft">
-                <div className="flex gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "300ms" }} />
+              {messages.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-16 gap-4">
+                  <ChronosAvatar isThinking={false} size={80} />
+                  <p className="text-muted-foreground text-center text-sm font-body max-w-sm">
+                    Hello. I am Chronos, your personal healthcare companion. Tap the microphone to speak, or use the camera to scan an injury.
+                  </p>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+              )}
 
-      {/* Input */}
-      <div className="border-t border-border bg-card/60 backdrop-blur-sm">
-        <div className="max-w-2xl mx-auto px-4 py-3">
-          <ChatInput
-            onSend={sendText}
-            onImageCapture={sendImage}
-            disabled={isLoading}
-            lastAssistantText={lastAssistantMsg?.content}
-            onSpeakingChange={setIsSpeaking}
-          />
+              {messages.map((msg, i) => (
+                <ChatMessage
+                  key={i}
+                  role={msg.role}
+                  content={msg.content}
+                  imageUrl={msg.imageUrl}
+                  isStreaming={isLoading && i === messages.length - 1 && msg.role === "assistant"}
+                  isSpeaking={isSpeaking && i === messages.length - 1 && msg.role === "assistant"}
+                />
+              ))}
+
+              {isLoading && messages[messages.length - 1]?.role === "user" && (
+                <div className="flex gap-3 items-center animate-fade-slide-up">
+                  <ChronosAvatar isThinking size={40} />
+                  <div className="bg-card rounded-bubble px-5 py-3.5 shadow-soft">
+                    <div className="flex gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Input */}
+          <div className="border-t border-border bg-card/60 backdrop-blur-sm">
+            <div className="max-w-2xl mx-auto px-4 py-3">
+              <ChatInput
+                onSend={sendText}
+                onImageCapture={sendImage}
+                disabled={isLoading}
+                lastAssistantText={lastAssistantMsg?.content}
+                onSpeakingChange={setIsSpeaking}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-2xl mx-auto px-4 py-6">
+            <HistoryPanel onRestore={restoreConversation} />
+            {messages.length > 0 && (
+              <button
+                onClick={startNewChat}
+                className="w-full mt-4 text-sm bg-primary/10 hover:bg-primary/20 text-primary rounded-xl py-3 font-medium transition-colors font-body"
+              >
+                + New conversation
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
