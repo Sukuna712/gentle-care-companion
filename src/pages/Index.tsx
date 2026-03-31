@@ -281,30 +281,36 @@ const Index = () => {
 
       {/* Bottom Navigation */}
       <nav className="border-t border-border bg-card/80 backdrop-blur-xl">
-        <div className="max-w-2xl mx-auto flex items-center justify-around py-1.5 px-2">
-          {([
-            { id: "chat", icon: MessageCircle, label: "Chat" },
-            { id: "firstaid", icon: Heart, label: "First Aid" },
-            { id: "symptoms", icon: Stethoscope, label: "Symptoms" },
-            { id: "timeline", icon: Camera, label: "Timeline" },
-            { id: "history", icon: Clock, label: "History" },
-            { id: "sos", icon: AlertTriangle, label: "SOS" },
-          ] as const).map(({ id, icon: Icon, label }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id)}
-              className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg transition-all ${
-                activeTab === id
-                  ? id === "sos"
-                    ? "text-destructive"
-                    : "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Icon size={18} />
-              <span className="text-[10px] font-body font-medium">{label}</span>
-            </button>
-          ))}
+        <div className="max-w-2xl mx-auto overflow-x-auto scrollbar-hide">
+          <div className="flex items-center py-1.5 px-2 min-w-max">
+            {([
+              { id: "chat", icon: MessageCircle, label: "Chat" },
+              { id: "firstaid", icon: Heart, label: "First Aid" },
+              { id: "symptoms", icon: Stethoscope, label: "Symptoms" },
+              { id: "skin", icon: Scan, label: "Skin" },
+              { id: "meds", icon: Pill, label: "Meds" },
+              { id: "vitals", icon: Activity, label: "Vitals" },
+              { id: "timeline", icon: Camera, label: "Timeline" },
+              { id: "family", icon: Users, label: "Family" },
+              { id: "history", icon: Clock, label: "History" },
+              { id: "sos", icon: AlertTriangle, label: "SOS" },
+            ] as const).map(({ id, icon: Icon, label }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-all shrink-0 ${
+                  activeTab === id
+                    ? id === "sos"
+                      ? "text-destructive"
+                      : "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon size={18} />
+                <span className="text-[10px] font-body font-medium">{label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </nav>
     </div>
