@@ -32,7 +32,7 @@ const Index = () => {
   const [streamMessages, setStreamMessages] = useState<Msg[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [activeTab, setActiveTab] = useState<"chat" | "history" | "firstaid" | "timeline" | "symptoms" | "sos">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "history" | "firstaid" | "timeline" | "symptoms" | "sos" | "meds" | "vitals" | "skin" | "family">("chat");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
