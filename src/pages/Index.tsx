@@ -261,6 +261,22 @@ const Index = () => {
         <div className="flex-1 overflow-hidden">
           <EmergencySOS />
         </div>
+      ) : activeTab === "meds" ? (
+        <div className="flex-1 overflow-hidden">
+          <MedicationReminders />
+        </div>
+      ) : activeTab === "vitals" ? (
+        <div className="flex-1 overflow-hidden">
+          <HealthVitals />
+        </div>
+      ) : activeTab === "skin" ? (
+        <div className="flex-1 overflow-hidden">
+          <SkinAnalysis />
+        </div>
+      ) : activeTab === "family" ? (
+        <div className="flex-1 overflow-hidden">
+          <FamilyProfiles />
+        </div>
       ) : null}
 
       {/* Bottom Navigation */}
