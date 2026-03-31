@@ -14,6 +14,10 @@ import FirstAidCards from "@/components/FirstAidCards";
 import InjuryTimeline from "@/components/InjuryTimeline";
 import SymptomChecker from "@/components/SymptomChecker";
 import EmergencySOS from "@/components/EmergencySOS";
+import MedicationReminders from "@/components/MedicationReminders";
+import HealthVitals from "@/components/HealthVitals";
+import SkinAnalysis from "@/components/SkinAnalysis";
+import FamilyProfiles from "@/components/FamilyProfiles";
 
 interface DisplayMsg {
   role: "user" | "assistant";
