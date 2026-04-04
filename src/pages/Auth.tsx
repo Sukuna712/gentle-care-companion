@@ -65,7 +65,7 @@ const Auth = () => {
       {/* Top Nav */}
       <nav className="flex items-center justify-between px-6 py-4 border-b border-border/50">
         <h2 className="font-display font-bold text-lg tracking-widest uppercase text-foreground">
-          Chronos
+          Chronos Apex
         </h2>
         <div className="hidden sm:flex items-center gap-2">
           <span className="text-[10px] tracking-[0.3em] uppercase text-primary border border-primary/30 bg-primary/5 px-3 py-1 rounded-sm font-body">
