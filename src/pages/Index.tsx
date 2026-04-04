@@ -160,7 +160,7 @@ const Index = () => {
         <div className="flex items-center gap-3">
           <ChronosAvatar isThinking={isLoading} isSpeaking={isSpeaking} size={36} />
           <h1 className="text-xl font-display font-bold text-foreground tracking-tight">
-            Chronos
+            Chronos Apex
           </h1>
         </div>
 
