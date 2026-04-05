@@ -9,7 +9,7 @@ import HistoryPanel from "@/components/HistoryPanel";
 import { useAuth } from "@/hooks/useAuth";
 import { saveConversation } from "@/lib/historyStorage";
 import { toast } from "sonner";
-import { LogOut, MessageCircle, Clock, Heart, Camera, AlertTriangle, Stethoscope, Pill, Activity, Scan, Users } from "lucide-react";
+import { LogOut, MessageCircle, Clock, Heart, Camera, AlertTriangle, Stethoscope, Pill, Activity, Scan, Users, Lock } from "lucide-react";
 import FirstAidCards from "@/components/FirstAidCards";
 import InjuryTimeline from "@/components/InjuryTimeline";
 import SymptomChecker from "@/components/SymptomChecker";
@@ -18,6 +18,8 @@ import MedicationReminders from "@/components/MedicationReminders";
 import HealthVitals from "@/components/HealthVitals";
 import SkinAnalysis from "@/components/SkinAnalysis";
 import FamilyProfiles from "@/components/FamilyProfiles";
+import PremiumGate from "@/components/PremiumGate";
+import { usePurchases } from "@/hooks/usePurchases";
 
 interface DisplayMsg {
   role: "user" | "assistant";
@@ -27,6 +29,7 @@ interface DisplayMsg {
 
 const Index = () => {
   const { session, loading: authLoading, signOut } = useAuth();
+  const { isUnlocked, purchaseModule } = usePurchases();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<DisplayMsg[]>([]);
   const [streamMessages, setStreamMessages] = useState<Msg[]>([]);
@@ -255,7 +258,7 @@ const Index = () => {
         </div>
       ) : activeTab === "symptoms" ? (
         <div className="flex-1 overflow-hidden">
-          <SymptomChecker />
+          {isUnlocked("symptom_checker") ? <SymptomChecker /> : <PremiumGate module="symptom_checker" onPurchase={purchaseModule} />}
         </div>
       ) : activeTab === "sos" ? (
         <div className="flex-1 overflow-hidden">
@@ -267,7 +270,7 @@ const Index = () => {
         </div>
       ) : activeTab === "vitals" ? (
         <div className="flex-1 overflow-hidden">
-          <HealthVitals />
+          {isUnlocked("health_vitals") ? <HealthVitals /> : <PremiumGate module="health_vitals" onPurchase={purchaseModule} />}
         </div>
       ) : activeTab === "skin" ? (
         <div className="flex-1 overflow-hidden">
@@ -275,7 +278,7 @@ const Index = () => {
         </div>
       ) : activeTab === "family" ? (
         <div className="flex-1 overflow-hidden">
-          <FamilyProfiles />
+          {isUnlocked("family_profiles") ? <FamilyProfiles /> : <PremiumGate module="family_profiles" onPurchase={purchaseModule} />}
         </div>
       ) : null}
 

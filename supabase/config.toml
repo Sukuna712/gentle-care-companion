@@ -2,3 +2,9 @@ project_id = "fuyreowwxfpbsdvbahzb"
 
 [functions.chat]
 verify_jwt = false
+
+[functions.dodo-checkout]
+verify_jwt = false
+
+[functions.dodo-webhook]
+verify_jwt = false
