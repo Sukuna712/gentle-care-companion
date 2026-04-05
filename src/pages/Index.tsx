@@ -258,7 +258,7 @@ const Index = () => {
         </div>
       ) : activeTab === "symptoms" ? (
         <div className="flex-1 overflow-hidden">
-          <SymptomChecker />
+          {isUnlocked("symptom_checker") ? <SymptomChecker /> : <PremiumGate module="symptom_checker" onPurchase={purchaseModule} />}
         </div>
       ) : activeTab === "sos" ? (
         <div className="flex-1 overflow-hidden">
@@ -270,7 +270,7 @@ const Index = () => {
         </div>
       ) : activeTab === "vitals" ? (
         <div className="flex-1 overflow-hidden">
-          <HealthVitals />
+          {isUnlocked("health_vitals") ? <HealthVitals /> : <PremiumGate module="health_vitals" onPurchase={purchaseModule} />}
         </div>
       ) : activeTab === "skin" ? (
         <div className="flex-1 overflow-hidden">
@@ -278,7 +278,7 @@ const Index = () => {
         </div>
       ) : activeTab === "family" ? (
         <div className="flex-1 overflow-hidden">
-          <FamilyProfiles />
+          {isUnlocked("family_profiles") ? <FamilyProfiles /> : <PremiumGate module="family_profiles" onPurchase={purchaseModule} />}
         </div>
       ) : null}
 
