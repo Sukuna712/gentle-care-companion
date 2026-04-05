@@ -9,7 +9,7 @@ import HistoryPanel from "@/components/HistoryPanel";
 import { useAuth } from "@/hooks/useAuth";
 import { saveConversation } from "@/lib/historyStorage";
 import { toast } from "sonner";
-import { LogOut, MessageCircle, Clock, Heart, Camera, AlertTriangle, Stethoscope, Pill, Activity, Scan, Users } from "lucide-react";
+import { LogOut, MessageCircle, Clock, Heart, Camera, AlertTriangle, Stethoscope, Pill, Activity, Scan, Users, Lock } from "lucide-react";
 import FirstAidCards from "@/components/FirstAidCards";
 import InjuryTimeline from "@/components/InjuryTimeline";
 import SymptomChecker from "@/components/SymptomChecker";
