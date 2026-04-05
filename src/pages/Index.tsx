@@ -18,6 +18,8 @@ import MedicationReminders from "@/components/MedicationReminders";
 import HealthVitals from "@/components/HealthVitals";
 import SkinAnalysis from "@/components/SkinAnalysis";
 import FamilyProfiles from "@/components/FamilyProfiles";
+import PremiumGate from "@/components/PremiumGate";
+import { usePurchases } from "@/hooks/usePurchases";
 
 interface DisplayMsg {
   role: "user" | "assistant";
