@@ -28,7 +28,7 @@ serve(async (req) => {
     if (webhookSecret) {
       const signature = req.headers.get("x-dodo-signature") || req.headers.get("webhook-signature");
       if (signature) {
-        const computed = hmac("sha256", webhookSecret, body, "utf8", "hex");
+        const computed = await hmacSha256(webhookSecret, body);
         if (computed !== signature) {
           console.error("Invalid webhook signature");
           return new Response(JSON.stringify({ error: "Invalid signature" }), {
