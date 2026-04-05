@@ -29,6 +29,7 @@ interface DisplayMsg {
 
 const Index = () => {
   const { session, loading: authLoading, signOut } = useAuth();
+  const { isUnlocked, purchaseModule } = usePurchases();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<DisplayMsg[]>([]);
   const [streamMessages, setStreamMessages] = useState<Msg[]>([]);
