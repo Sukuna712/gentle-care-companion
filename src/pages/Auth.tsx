@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
@@ -14,6 +14,10 @@ const Auth = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const rawNext = searchParams.get("next");
+  const nextPath = rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
+  const postAuthUrl = window.location.origin + nextPath;
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,13 +30,13 @@ const Auth = () => {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate("/");
+        window.location.href = postAuthUrl;
       } else {
         const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: postAuthUrl,
             data: { full_name: fullName },
           },
         });
@@ -50,15 +54,18 @@ const Auth = () => {
     setLoading(true);
     try {
       const { error } = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: postAuthUrl,
       });
       if (error) throw error;
+      // If the helper set tokens without redirect, go to the intended path.
+      window.location.href = postAuthUrl;
     } catch (err: any) {
       toast.error(err.message || "Google sign-in failed");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
