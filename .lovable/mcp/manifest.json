@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "sdk_version": "0.24.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://fuyreowwxfpbsdvbahzb.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "chronos-apex-mcp",
+      "version": "0.1.0",
+      "title": "Chronos Apex"
+    },
+    "tools": [
+      {
+        "name": "get_profile",
+        "title": "Get my Chronos profile",
+        "description": "Return the signed-in user's Chronos Apex profile (display name, avatar).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_profile",
+        "title": "Update my Chronos profile",
+        "description": "Update the signed-in user's display name and/or avatar URL.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "display_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "New display name."
+            },
+            "avatar_url": {
+              "type": "string",
+              "format": "uri",
+              "description": "New avatar image URL."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_unlocked_modules",
+        "title": "List my unlocked modules",
+        "description": "List the premium Chronos Apex modules the signed-in user has purchased.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "first_aid_guide",
+        "title": "Chronos first-aid guide",
+        "description": "Return Chronos Apex's general home-care guidance for a common minor issue. Not a medical diagnosis. Topics: cuts, burns, sprains, headache, bite.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "enum": [
+                "cuts",
+                "burns",
+                "sprains",
+                "headache",
+                "bite"
+              ],
+              "description": "Which first-aid topic to return."
+            }
+          },
+          "required": [
+            "topic"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
