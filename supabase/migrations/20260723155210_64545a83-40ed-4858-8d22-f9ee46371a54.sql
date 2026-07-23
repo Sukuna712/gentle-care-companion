@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Only service role can insert purchases" ON public.user_purchases;
