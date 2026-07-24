@@ -93,26 +93,123 @@ const Auth = () => {
       <div className="flex-1 flex flex-col lg:flex-row">
         {/* Left Hero */}
         <div className="hidden lg:flex flex-1 flex-col justify-between p-12 relative overflow-hidden">
-          {/* Background glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+          {/* Modular tile grid background */}
+          <div className="absolute inset-0 pointer-events-none opacity-70">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(hsl(var(--primary)/0.08) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)/0.08) 1px, transparent 1px)",
+                backgroundSize: "36px 36px",
+                maskImage:
+                  "radial-gradient(ellipse at 30% 40%, black 20%, transparent 75%)",
+              }}
+            />
+            {/* Random flickering tiles */}
+            <div className="absolute inset-0 grid grid-cols-12 grid-rows-12 gap-[2px] p-6">
+              {Array.from({ length: 42 }).map((_, i) => {
+                const col = (i * 7) % 12;
+                const row = (i * 5) % 12;
+                const delay = (i % 9) * 0.35;
+                return (
+                  <div
+                    key={i}
+                    className="animate-tile-flicker rounded-[2px] bg-primary"
+                    style={{
+                      gridColumnStart: col + 1,
+                      gridRowStart: row + 1,
+                      animationDelay: `${delay}s`,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
 
-          <div className="relative z-10 space-y-6 max-w-md">
-            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-sm px-3 py-1.5">
+          {/* Ambient glows */}
+          <div className="absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/10 blur-[140px] pointer-events-none animate-breathe" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-accent/10 blur-[140px] pointer-events-none animate-breathe" style={{ animationDelay: "1.5s" }} />
+
+          {/* Scanline sweep */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute inset-x-0 h-24 bg-gradient-to-b from-transparent via-primary/10 to-transparent animate-scan-sweep" />
+          </div>
+
+          {/* Top: status + orbit ring */}
+          <div className="relative z-10 flex items-start justify-between">
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-sm px-3 py-1.5 backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-[11px] tracking-[0.2em] uppercase text-primary font-body font-medium">
-                System Online
+                Signal Locked · Node 07
               </span>
+            </div>
+
+            <div className="relative w-14 h-14">
+              <div className="absolute inset-0 rounded-full border border-primary/30 animate-spin-slow" style={{ borderTopColor: "hsl(var(--primary))" }} />
+              <div className="absolute inset-2 rounded-full border border-accent/30 animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "10s", borderRightColor: "hsl(var(--accent))" }} />
+              <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary))]" />
+            </div>
+          </div>
+
+          {/* Modular animated wordmark */}
+          <div className="relative z-10 space-y-8 max-w-md">
+            <div className="space-y-3">
+              <div className="text-[10px] tracking-[0.35em] uppercase text-muted-foreground font-body">
+                ▚ Modular Wordmark · v4.2
+              </div>
+              <div className="flex items-end gap-[6px] h-16">
+                {"CHRONOS".split("").map((letter, i) => (
+                  <div key={i} className="flex flex-col items-center gap-1">
+                    <div
+                      className="w-6 h-10 rounded-sm animate-block-morph"
+                      style={{ animationDelay: `${i * 0.15}s` }}
+                    />
+                    <span className="text-[9px] tracking-[0.2em] text-primary/70 font-body font-bold">
+                      {letter}
+                    </span>
+                  </div>
+                ))}
+                <div className="ml-2 flex flex-col items-center gap-1">
+                  <div className="w-6 h-10 rounded-sm bg-accent/80 animate-block-morph" style={{ animationDelay: "1s" }} />
+                  <span className="text-[9px] tracking-[0.2em] text-accent/80 font-body font-bold">A</span>
+                </div>
+              </div>
             </div>
 
             <h1 className="text-4xl xl:text-5xl font-display font-bold leading-tight text-foreground">
               Step into the{" "}
-              <span className="text-primary">Chronos Horizon</span>
+              <span
+                className="bg-clip-text text-transparent animate-gradient-shift"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))",
+                }}
+              >
+                Chronos Horizon
+              </span>
             </h1>
 
             <p className="text-sm text-muted-foreground font-body leading-relaxed max-w-sm">
-              The Next Generation AI chatbot that assists minor injuries like a doctor available at home in a single prompt.
+              The next-generation AI companion that assists minor injuries like a doctor available at home — one prompt away.
             </p>
+
+            {/* Live ticker */}
+            <div className="relative h-6 overflow-hidden border-l-2 border-primary/50 pl-3">
+              {[
+                "◉ Live · 12 clinicians reviewing protocols",
+                "◉ Wound-care module synced · v1.4",
+                "◉ Voice link calibrated · latency 42ms",
+                "◉ 40,218 verified nodes online",
+              ].map((line, i) => (
+                <div
+                  key={i}
+                  className="absolute inset-0 text-[11px] tracking-[0.15em] uppercase text-primary/80 font-body animate-ticker"
+                  style={{ animationDelay: `${i * 3}s`, animationDuration: "12s" }}
+                >
+                  {line}
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="relative z-10 flex items-center gap-3 mt-auto pt-12">
