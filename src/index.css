@@ -144,10 +144,13 @@
 
 /* Ticker slide */
 @keyframes tickerSlide {
-  0%, 100% { transform: translateY(100%); opacity: 0; }
-  10%, 90% { transform: translateY(0); opacity: 1; }
+  0% { transform: translateY(100%); opacity: 0; }
+  3%, 22% { transform: translateY(0); opacity: 1; }
+  25%, 100% { transform: translateY(-100%); opacity: 0; }
 }
-.animate-ticker { animation: tickerSlide 3s ease-in-out infinite; }
+.animate-ticker {
+  animation: tickerSlide 12s ease-in-out infinite both;
+}
 
 /* Slow spin ring */
 @keyframes spinSlow { to { transform: rotate(360deg); } }
