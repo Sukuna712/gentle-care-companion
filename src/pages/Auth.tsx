@@ -203,8 +203,8 @@ const Auth = () => {
               ].map((line, i) => (
                 <div
                   key={i}
-                  className="absolute inset-0 text-[11px] tracking-[0.15em] uppercase text-primary/80 font-body animate-ticker"
-                  style={{ animationDelay: `${i * 3}s`, animationDuration: "12s" }}
+                  className="absolute inset-0 flex items-center whitespace-nowrap text-[11px] leading-none tracking-[0.12em] uppercase text-primary/80 font-body animate-ticker"
+                  style={{ animationDelay: `${i * 3}s` }}
                 >
                   {line}
                 </div>
